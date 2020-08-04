@@ -15,10 +15,20 @@ int totalConfirmed;
 int totalDeaths;
 int totalRecovered;
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _HomeScreen();
+}
+
+class _HomeScreen extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(Object context) {
-    getData();
     return Scaffold(
       appBar: buildAppBar(),
       body: SingleChildScrollView(
@@ -205,7 +215,6 @@ Future<String> getData() async {
       Uri.encodeFull("https://api.covid19api.com/summary"),
       headers: {"Accept": "application/json"});
   Map<String, dynamic> data = JsonDecoder().convert(response.body);
-
   for (var country in data["Countries"]) {
     if (country["CountryCode"] == ("VN")) {
       print(country);

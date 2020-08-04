@@ -6,8 +6,12 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _MyApp();
+}
+
+class _MyApp extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,3 +26,19 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+// class MyApp extends StatelessWidget {
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: 'Covid-19 App',
+//       theme: ThemeData(
+//         primaryColor: kPrimaryColor,
+//         scaffoldBackgroundColor: kBackGroundColor,
+//         textTheme: Theme.of(context).textTheme.apply(displayColor: kTextColor),
+//       ),
+//       home: HomeScreen(),
+//     );
+//   }
+// }
