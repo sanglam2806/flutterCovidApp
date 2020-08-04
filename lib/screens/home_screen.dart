@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:covid_19/constants.dart';
 import 'package:covid_19/screens/new_case_screen.dart';
 import 'package:covid_19/widgets/infor_card.dart';
@@ -8,9 +10,15 @@ import 'package:flutter_svg/svg.dart';
 import "dart:async";
 import "package:http/http.dart" as http;
 
+int newConfirmed;
+int totalConfirmed;
+int totalDeaths;
+int totalRecovered;
+
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(Object context) {
+    getData();
     return Scaffold(
       appBar: buildAppBar(),
       body: SingleChildScrollView(
@@ -35,25 +43,25 @@ class HomeScreen extends StatelessWidget {
                   InforCard(
                     title: "Confirm Cases",
                     iconColor: Color(0xFFFF8C00),
-                    effectNum: 631,
+                    effectNum: totalConfirmed,
                     press: () {},
                   ),
                   InforCard(
                     title: "Total Deaths",
                     iconColor: Color(0xFFFF2D55),
-                    effectNum: 6,
+                    effectNum: totalDeaths,
                     press: () {},
                   ),
                   InforCard(
                     title: "Total Recovered",
                     iconColor: Color(0xFF50E3C2),
-                    effectNum: 400,
+                    effectNum: totalRecovered,
                     press: () {},
                   ),
                   InforCard(
                     title: "New Cases",
                     iconColor: Color(0xFF5856D6),
-                    effectNum: 1,
+                    effectNum: newConfirmed,
                     press: () {
                       Navigator.push(
                         context,
@@ -190,4 +198,22 @@ class HomeScreen extends StatelessWidget {
       ],
     );
   }
+}
+
+Future<String> getData() async {
+  http.Response response = await http.get(
+      Uri.encodeFull("https://api.covid19api.com/summary"),
+      headers: {"Accept": "application/json"});
+  Map<String, dynamic> data = JsonDecoder().convert(response.body);
+
+  for (var country in data["Countries"]) {
+    if (country["CountryCode"] == ("VN")) {
+      print(country);
+      newConfirmed = int.parse(country["NewConfirmed"].toString());
+      totalConfirmed = int.parse(country["TotalConfirmed"].toString());
+      totalDeaths = int.parse(country["TotalDeaths"].toString());
+      totalRecovered = int.parse(country["TotalRecovered"].toString());
+    }
+  }
+  // print(data["Countries"]);
 }
